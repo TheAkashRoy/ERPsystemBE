@@ -1,11 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
+const cors = require('cors')
+
 
 const app = express();
 const PORT = 5000;
 const secretKey = "enigma";
-
+app.use(cors());
 app.use(bodyParser.json());
 
 const users = [
@@ -16,6 +18,20 @@ const users = [
         designation: "student"
     },
 ];
+
+const mongoose = require('mongoose');
+mongoose.connect("mongodb+srv://emailforakashroy:cySFrQASlOiQf2pt@cluster0.hxo7td9.mongodb.net/?retryWrites=true&w=majority", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => {
+  console.log('Connected to MongoDB Atlas');
+});
+
 
 const verifyToken = (req, res, next) => {
     //   const token = req.headers.authorization;

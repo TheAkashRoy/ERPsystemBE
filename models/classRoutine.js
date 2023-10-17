@@ -1,6 +1,5 @@
-import { Schema, model } from 'mongoose';
-
-const classRoutineSchema = new Schema({
+const {model, Schema} = require("mongoose")
+const classRoutineSchema = Schema({
   day: String,
   dept: String,
   year: String,
@@ -9,5 +8,4 @@ const classRoutineSchema = new Schema({
 });
 
 const classRoutine = model('ClassRoutine', classRoutineSchema);
-
-export default classRoutine;
+module.exports = classRoutine;

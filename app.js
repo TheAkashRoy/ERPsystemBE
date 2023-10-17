@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 const cors = require('cors')
-
+const  {verifyToken} = require('./auth.js')
 
 const app = express();
 const PORT = 5000;
@@ -20,7 +20,7 @@ const users = [
 ];
 
 const mongoose = require('mongoose');
-mongoose.connect("mongodb+srv://emailforakashroy:cySFrQASlOiQf2pt@cluster0.hxo7td9.mongodb.net/?retryWrites=true&w=majority", {
+mongoose.connect("URI", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -31,26 +31,6 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => {
   console.log('Connected to MongoDB Atlas');
 });
-
-
-const verifyToken = (req, res, next) => {
-    //   const token = req.headers.authorization;
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1]
-    console.log(token);
-    console.log(users);
-    if (!token) {
-        return res.status(401).json({ message: "Unauthorized: Missing token" });
-    }
-
-    jwt.verify(token, secretKey, (err, decoded) => {
-        if (err) {
-            return res.status(401).json({ message: "Unauthorized: Invalid token" });
-        }
-        req.user = decoded;
-        next();
-    });
-};
 
 
 app.post("/register", (req, res) => {

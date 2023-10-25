@@ -1,14 +1,19 @@
+require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 const cors = require('cors')
 const  {verifyToken} = require('./auth.js')
+const teacher = require('./models/teacher.js')
 
 const app = express();
 const PORT = 5000;
 const secretKey = "enigma";
 app.use(cors());
 app.use(bodyParser.json());
+
+const mongodbUri = process.env.MONGO_URI;
+
 
 const users = [
     {
@@ -20,7 +25,7 @@ const users = [
 ];
 
 const mongoose = require('mongoose');
-mongoose.connect("URI", {
+mongoose.connect(mongodbUri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -76,10 +81,51 @@ app.get("/protected", verifyToken, (req, res) => {
 });
 
 app.get("/", (req, res) => {
+    async function insertData() {
+        try {
+          // Insert data into Collection1
+          const newData = new teacher({
+            empid: "00000",
+            name: "kuhkuh",
+            dept: "sjsi",
+            ongoingCourses: [
+            {
+                year: "2",
+                courseName: "sasa"
+            }
+            ]
+          });
+          const savedData = await newData.save();
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }
+    insertData();
     res.json({
         message: "yoyo",
     });
 });
+
+app.post('/insertTeacher', async (req, res) => {
+    try {
+      const { empid, name, dept, ongoingCourses } = req.body;
+      const newTeacher = new teacher({
+        empid,
+        name,
+        dept,
+        ongoingCourses,
+      });
+      const savedTeacher = await newTeacher.save();
+      res.status(201).json({
+        message: 'Teacher data saved successfully',
+        data: savedTeacher,
+      });
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'An error occurred while saving teacher data' });
+    }
+  });
+
 
 
 app.listen(PORT, () => {

@@ -1,7 +1,7 @@
-import { Schema, model } from 'mongoose';
+const {model, Schema} = require("mongoose")
 
 const professorSchema = new Schema({
-  _id: ObjectId,
+  empid: Number,
   name: String,
   dept: String,
   ongoingCourses: [
@@ -14,6 +14,6 @@ const professorSchema = new Schema({
 );
 
 
-const teacher = model('Professor', professorSchema);
+const teacher = model('teacher', professorSchema);
 
-export default teacher;
+module.exports = teacher;

@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongoose';
 import { Schema, model } from 'mongoose';
 
-const studentSchema =  Mongoose.Schema({
+const studentSchema = new Schema({
     _id: ObjectId,
     name: String,
     dept: String,

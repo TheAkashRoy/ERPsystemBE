@@ -1,22 +1,15 @@
-import { Schema, model } from 'mongoose';
+const {model, Schema} = require("mongoose")
 
 const qbSchema = new Schema({
-    subject: String,
-        sets: [
-            {
-                setNo: String,
-                questions: [
-                    {
-                        question: String,
-                        options: [String]
-                    }
-                ]
-            }
-        ]
-}
-);
+  subject: String,
+  setNo: String,
+  questions: [
+    {
+      question: String,
+      options: [String],
+    },
+  ],
+});
 
-
-const qb = model('Professor', qbSchema);
-export default qb;
-
+const questionBank = model("questionBank", qbSchema);
+module.exports = questionBank;
